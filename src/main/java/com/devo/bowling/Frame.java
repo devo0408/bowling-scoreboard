@@ -15,7 +15,7 @@ public class Frame {
     private Frame prev;
     private Frame next;
 
-    void push(Integer pin){
+    public void push(Integer pin){
         if (pin > MAX_SCORE) throw new BowlingException("Score more then: " + MAX_SCORE);
         if (isDone()) throw new BowlingException("Frame is done");
         pins.add(pin);
