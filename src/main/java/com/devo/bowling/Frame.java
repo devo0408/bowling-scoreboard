@@ -6,14 +6,11 @@ import java.util.List;
 
 public class Frame {
 
-    public static final int MAX_SCORE = 10;
+    private static final int MAX_SCORE = 10;
     private static final int MAX_TRY = 2;
     private static final int STRIKE_TRY = 1;
 
     private List<Integer> pins = new ArrayList<>(MAX_TRY);
-
-    private Frame prev;
-    private Frame next;
 
     public void push(Integer pin){
         if (pin > MAX_SCORE) throw new BowlingException("Score more then: " + MAX_SCORE);
@@ -25,7 +22,7 @@ public class Frame {
         return isStrike() || (pins.size() == MAX_TRY);
     }
 
-    public Integer score(){
+    public int score(){
         return pins.stream().mapToInt(Integer::intValue).sum();
     }
 
