@@ -8,24 +8,30 @@ public class Game {
 
     private LinkedList<Frame> frames = new LinkedList<>();
 
-    void push(int pins){
-
+    public void push(int pins){
+        if (isFinished()) throw new BowlingException("Game is finished");
+        Frame lastFrame = resolveLastFrame();
+        lastFrame.push(pins);
     }
 
-    private boolean isFinished(){
+    public boolean isFinished(){
         return (frames.size() == MAX_FRAMES) && frames.getLast().isDone();
     }
 
-    private Frame resolveLastFrameFrame(){
-
-        Frame lastFrame = frames.getLast();
-
-        Frame lastFrame = frames.getLast();
-        if (lastFrame.isDone()){
+    private Frame resolveLastFrame() {
+        Frame lastFrame = null;
+        if (!frames.isEmpty()) {
+            lastFrame = frames.getLast();
+        }
+        if (lastFrame == null && lastFrame.isDone()) {
             lastFrame = new Frame();
             frames.add(lastFrame);
         }
         return lastFrame;
+    }
+
+    public int score() {
+        return 300;
     }
 
 }
