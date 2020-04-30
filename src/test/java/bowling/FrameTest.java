@@ -52,6 +52,30 @@ public class FrameTest {
   }
 
   @Test
+  public void testSpareScore(){
+    Frame thirdSpareFrame = Frame.builder()
+        .pinOne(4)
+        .pinTwo(6)
+        .build();
+
+    Frame secondSpareStrike = Frame.builder()
+        .pinOne(5)
+        .pinTwo(5)
+        .nextFrame(thirdSpareFrame)
+        .build();
+
+    Frame firstSpareFrame = Frame.builder()
+        .pinOne(7)
+        .pinTwo(3)
+        .nextFrame(secondSpareStrike)
+        .build();
+
+    assertEquals(15, firstSpareFrame.score());
+    assertEquals(14, secondSpareStrike.score());
+    assertEquals(10, thirdSpareFrame.score());
+  }
+
+  @Test
   public void testRegularFrame() {
     Frame regularFrame = Frame.builder()
         .pinOne(3)
@@ -60,6 +84,30 @@ public class FrameTest {
     assertTrue(regularFrame.isFinished());
     assertFalse(regularFrame.isSpare());
     assertFalse(regularFrame.isStrike());
+  }
+
+  @Test
+  public void testRegularScore(){
+    Frame thirdRegularFrame = Frame.builder()
+        .pinOne(2)
+        .pinTwo(3)
+        .build();
+
+    Frame secondRegularStrike = Frame.builder()
+        .pinOne(5)
+        .pinTwo(1)
+        .nextFrame(thirdRegularFrame)
+        .build();
+
+    Frame firstRegularFrame = Frame.builder()
+        .pinOne(4)
+        .pinTwo(5)
+        .nextFrame(secondRegularStrike)
+        .build();
+
+    assertEquals(9, firstRegularFrame.score());
+    assertEquals(6, secondRegularStrike.score());
+    assertEquals(5, thirdRegularFrame.score());
   }
 
 }

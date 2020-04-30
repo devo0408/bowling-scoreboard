@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import static java.lang.Integer.sum;
+import static com.devo.bowling.Utils.integerToInt;
 
 @Getter
 public class Frame {
@@ -62,11 +63,11 @@ public class Frame {
   }
 
   private int pinsSum(){
-    return sum(pinOne, pinTwo);
+    return integerToInt(pinOne) + integerToInt(pinTwo);
   }
 
   private int spareExtraScore(){
-    return (hasNextFrame() ? nextFrame.pinOne : 0);
+    return (hasNextFrame() ? integerToInt(nextFrame.pinOne) : 0);
   }
 
   private int strikeExtraScore(){
@@ -74,7 +75,7 @@ public class Frame {
     if (hasNextFrame()) {
       extraScore += nextFrame.pinsSum();
       if (nextFrame.isStrike() && nextFrame.hasNextFrame()){
-        extraScore += nextFrame.getNextFrame().pinOne;
+        extraScore += integerToInt(nextFrame.getNextFrame().pinOne);
       }
     }
     return extraScore;
