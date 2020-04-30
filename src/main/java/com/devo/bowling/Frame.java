@@ -24,7 +24,6 @@ public class Frame {
 
   public int score(){
     int score = pinsSum();
-
     if (isSpare()) {
       score += spareExtraScore();
     }
@@ -43,7 +42,7 @@ public class Frame {
   }
 
   public boolean isSpare(){
-    return !isStrike() && MAX_SCORE.equals(sum(pinOne, pinTwo));
+    return !isStrike() && MAX_SCORE.equals(pinsSum());
   }
 
   public boolean isStrike(){
