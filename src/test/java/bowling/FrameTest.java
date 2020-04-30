@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 
 public class FrameTest {
 
@@ -16,6 +17,27 @@ public class FrameTest {
     assertTrue(strikeFrame.isStrike());
     assertTrue(strikeFrame.isFinished());
     assertFalse(strikeFrame.isSpare());
+  }
+
+  @Test
+  public void testStrikeScore() {
+    Frame thirdStrikeFrame = Frame.builder()
+        .pinOne(10)
+        .build();
+
+    Frame secondFrameStrike = Frame.builder()
+        .pinOne(10)
+        .nextFrame(thirdStrikeFrame)
+        .build();
+
+    Frame firstStrikeFrame = Frame.builder()
+        .pinOne(10)
+        .nextFrame(secondFrameStrike)
+        .build();
+
+    assertEquals(30, firstStrikeFrame.score());
+    assertEquals(20, secondFrameStrike.score());
+    assertEquals(10, thirdStrikeFrame.score());
   }
 
   @Test
