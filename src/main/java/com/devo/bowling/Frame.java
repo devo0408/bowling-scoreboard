@@ -10,24 +10,32 @@ public class Frame {
 
   private final Integer pinOne;
   private final Integer pinTwo;
-  private final Frame prevFrame;
+  private final Frame nextFrame;
 
   private Integer MAX_SCORE = 10;
 
 
   @Builder(toBuilder = true)
-  public Frame(Integer pinOne, Integer pinTwo, Frame prevFrame) {
+  public Frame(Integer pinOne, Integer pinTwo, Frame nextFrame) {
     this.pinOne = pinOne;
     this.pinTwo = pinTwo;
-    this.prevFrame = prevFrame;
+    this.nextFrame = nextFrame;
   }
 
   public int score(){
-    return sum(pinOne, pinTwo);
+    int score = pinsSum();
+
+    if (isSpare()) {
+      score += spareExtraScore();
+    }
+    if (isStrike()) {
+      score += strikeExtraScore();
+    }
+    return score;
   }
 
-  public boolean hasPrevFrame(){
-    return prevFrame != null;
+  public boolean hasNextFrame(){
+    return nextFrame != null;
   }
 
   public boolean isFinished(){
@@ -46,6 +54,31 @@ public class Frame {
     return toBuilder()
         .pinTwo(pinTwo)
         .build();
+  }
+
+  public Frame withNextFrame(Frame nextFrame) {
+    return toBuilder()
+        .nextFrame(nextFrame)
+        .build();
+  }
+
+  private int pinsSum(){
+    return sum(pinOne, pinTwo);
+  }
+
+  private int spareExtraScore(){
+    return (hasNextFrame() ? nextFrame.pinOne : 0);
+  }
+
+  private int strikeExtraScore(){
+    int extraScore = 0;
+    if (hasNextFrame()) {
+      extraScore += nextFrame.pinsSum();
+      if (nextFrame.isStrike() && nextFrame.hasNextFrame()){
+        extraScore += nextFrame.getNextFrame().pinOne;
+      }
+    }
+    return extraScore;
   }
 
 }
