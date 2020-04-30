@@ -1,37 +1,51 @@
 package com.devo.bowling;
 
+import lombok.Builder;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.lang.Integer.sum;
 
+@Getter
 public class Frame {
 
-    private static final int MAX_SCORE = 10;
-    private static final int MAX_TRY = 2;
-    private static final int STRIKE_TRY = 1;
+  private final Integer pinOne;
+  private final Integer pinTwo;
+  private final Frame prevFrame;
 
-    private List<Integer> pins = new ArrayList<>(MAX_TRY);
+  private Integer MAX_SCORE = 10;
 
-    public void push(Integer pin){
-        if (pin > MAX_SCORE) throw new BowlingException("Score more then: " + MAX_SCORE);
-        if (isDone()) throw new BowlingException("Frame is done");
-        pins.add(pin);
-    }
 
-    public boolean isDone(){
-        return isStrike() || (pins.size() == MAX_TRY);
-    }
+  @Builder(toBuilder = true)
+  public Frame(Integer pinOne, Integer pinTwo, Frame prevFrame) {
+    this.pinOne = pinOne;
+    this.pinTwo = pinTwo;
+    this.prevFrame = prevFrame;
+  }
 
-    public int score(){
-        return pins.stream().mapToInt(Integer::intValue).sum();
-    }
+  public int score(){
+    return sum(pinOne, pinTwo);
+  }
 
-    public boolean isSpare(){
-        return (score() == MAX_SCORE) && (pins.size() == MAX_TRY);
-    }
+  public boolean hasPrevFrame(){
+    return prevFrame != null;
+  }
 
-    public boolean isStrike(){
-        return (score() == MAX_SCORE) && (pins.size() == STRIKE_TRY);
-    }
+  public boolean isFinished(){
+    return isStrike() && (pinOne != null && pinTwo != null);
+  }
+
+  public boolean isSpare(){
+    return !isStrike() && MAX_SCORE.equals(sum(pinOne, pinTwo));
+  }
+
+  public boolean isStrike(){
+    return MAX_SCORE.equals(pinOne);
+  }
+
+  public Frame withPinTwo(int pinTwo) {
+    return toBuilder()
+        .pinTwo(pinTwo)
+        .build();
+  }
 
 }
