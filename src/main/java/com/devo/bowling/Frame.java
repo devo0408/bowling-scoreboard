@@ -38,7 +38,7 @@ public class Frame {
   }
 
   public boolean isFinished(){
-    return isStrike() && (pinOne != null && pinTwo != null);
+    return isStrike() || (pinOne != null && pinTwo != null);
   }
 
   public boolean isSpare(){
