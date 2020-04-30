@@ -1,5 +1,6 @@
 package bowling;
 
+import com.devo.bowling.BowlingException;
 import com.devo.bowling.Frame;
 import org.junit.Test;
 
@@ -108,6 +109,22 @@ public class FrameTest {
     assertEquals(9, firstRegularFrame.score());
     assertEquals(6, secondRegularStrike.score());
     assertEquals(5, thirdRegularFrame.score());
+  }
+
+  @Test(expected = BowlingException.class)
+  public void negativePinsTest(){
+    Frame negativeFrame = Frame.builder()
+        .pinOne(-1)
+        .pinTwo(9)
+        .build();
+  }
+
+  @Test(expected = BowlingException.class)
+  public void pinsOverflowTest(){
+    Frame overflowFrame = Frame.builder()
+        .pinOne(5)
+        .build();
+    overflowFrame.withPinTwo(6);
   }
 
 }

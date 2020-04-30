@@ -37,17 +37,14 @@ public class Game {
   }
 
   public boolean isFinished(){
-
     int framesCount = calculateFramesCount();
     List<Predicate<Integer>> isFinishedPredicates = List.of(
         (count) -> framesCount == MAX_FRAMES && !lastFrame.isSpare() && !lastFrame.isStrike(),
         (count) -> framesCount == MAX_FRAMES_LAST_SPARE && !lastFrame.isStrike(),
         (count) -> framesCount == MAX_FRAMES_LAST_STRIKE
     );
-
     return isFinishedPredicates.stream()
         .anyMatch(predicate -> predicate.test(framesCount));
-
   }
 
   private int calculateFramesCount(){

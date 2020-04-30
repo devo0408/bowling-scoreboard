@@ -3,8 +3,10 @@ package com.devo.bowling;
 import lombok.Builder;
 import lombok.Getter;
 
-import static java.lang.Integer.sum;
+
 import static com.devo.bowling.Utils.integerToInt;
+import static com.devo.bowling.Utils.between;
+import static java.lang.String.format;
 
 @Getter
 public class Frame {
@@ -13,6 +15,7 @@ public class Frame {
   private final Integer pinTwo;
   private final Frame nextFrame;
 
+  private Integer MIN_SCORE = 0;
   private Integer MAX_SCORE = 10;
 
 
@@ -21,6 +24,7 @@ public class Frame {
     this.pinOne = pinOne;
     this.pinTwo = pinTwo;
     this.nextFrame = nextFrame;
+    validatePinsSum();
   }
 
   public int score(){
@@ -60,6 +64,18 @@ public class Frame {
     return toBuilder()
         .nextFrame(nextFrame)
         .build();
+  }
+
+  private void validatePinsSum(){
+    if (!pinsCorrect()) {
+      throw new BowlingException(format("Pins mast be between %d and %d", MIN_SCORE, MAX_SCORE));
+    }
+  }
+
+  private boolean pinsCorrect(){
+    return between(integerToInt(pinOne), MIN_SCORE, MAX_SCORE)
+           && between(integerToInt(pinTwo), MIN_SCORE, MAX_SCORE)
+           && between(pinsSum(), MIN_SCORE, MAX_SCORE);
   }
 
   private int pinsSum(){
