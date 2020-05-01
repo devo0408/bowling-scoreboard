@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 
 public class Game {
 
-//  private Frame firstFrame;
+  private Frame firstFrame;
   private Frame lastFrame;
   private int framesCount;
 
@@ -16,9 +16,9 @@ public class Game {
 
   public Game (){
     Frame initialFrame = Frame.builder().build();
-//    this.firstFrame = initialFrame;
-    this.lastFrame = initialFrame;
-    this.framesCount = 1;
+    firstFrame = initialFrame;
+    lastFrame = initialFrame;
+    framesCount = 1;
   }
 
   public void push(int pins){
