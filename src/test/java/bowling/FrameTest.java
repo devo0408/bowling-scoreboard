@@ -124,7 +124,7 @@ public class FrameTest {
     Frame overflowFrame = Frame.builder()
         .pinOne(5)
         .build();
-    overflowFrame.withPinTwo(6);
+    overflowFrame.setPinTwo(6);
   }
 
 }
