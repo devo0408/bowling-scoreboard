@@ -5,13 +5,13 @@ import java.util.function.Predicate;
 
 public class Game {
 
-  private Frame firstFrame;
+  private final Frame firstFrame;
   private Frame lastFrame;
   private int framesCount;
 
-  private static final int MAX_FRAMES = 10;
-  private static final int MAX_FRAMES_LAST_SPARE = 11;
-  private static final int MAX_FRAMES_LAST_STRIKE = 12;
+  private static final int MAX_FRAMES_IN_GAME = 10;
+  private static final int MAX_FRAMES_IN_GAME_EXTRA_SPARE = 11;
+  private static final int MAX_FRAMES_IN_GAME_EXTRA_STRIKE = 12;
 
 
   public Game (){
@@ -31,19 +31,33 @@ public class Game {
       Frame newLastFrame = Frame.builder()
           .pinOne(pins)
           .build();
-      Frame frameBeforeLast = lastFrame;
-      frameBeforeLast.withNextFrame(newLastFrame);
+      lastFrame.setNextFrame(newLastFrame);
+      lastFrame = newLastFrame;
       framesCount++;
+    } else if (firstFrame == lastFrame){
+      lastFrame.setPinOne(pins);
     } else {
-      lastFrame.withPinTwo(pins);
+      lastFrame.setPinTwo(pins);
     }
+  }
+
+  public int score(){
+    int gameScore = 0;
+    int frameCount = 1;
+    Frame frameItem = firstFrame;
+    while (frameItem.hasNextFrame() && frameCount <= MAX_FRAMES_IN_GAME) {
+      gameScore += frameItem.score();
+      frameItem = frameItem.getNextFrame();
+      frameCount++;
+    }
+    return gameScore;
   }
 
   public boolean isFinished(){
     List<Predicate<Integer>> isFinishedPredicates = List.of(
-        (count) -> count == MAX_FRAMES && !lastFrame.isSpare() && !lastFrame.isStrike(),
-        (count) -> count == MAX_FRAMES_LAST_SPARE && !lastFrame.isStrike(),
-        (count) -> count == MAX_FRAMES_LAST_STRIKE
+        (count) -> count == MAX_FRAMES_IN_GAME && !lastFrame.isSpare() && !lastFrame.isStrike(),
+        (count) -> count == MAX_FRAMES_IN_GAME_EXTRA_SPARE && !lastFrame.isStrike(),
+        (count) -> count == MAX_FRAMES_IN_GAME_EXTRA_STRIKE
     );
     return isFinishedPredicates.stream()
         .anyMatch(predicate -> predicate.test(framesCount));

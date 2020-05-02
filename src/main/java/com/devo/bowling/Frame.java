@@ -11,20 +11,34 @@ import static java.lang.String.format;
 @Getter
 public class Frame {
 
-  private final Integer pinOne;
-  private final Integer pinTwo;
-  private final Frame nextFrame;
+  private Integer pinOne;
+  private Integer pinTwo;
+  private Frame nextFrame;
 
   private final Integer MIN_SCORE = 0;
   private final Integer MAX_SCORE = 10;
 
 
-  @Builder(toBuilder = true)
+  @Builder
   public Frame(Integer pinOne, Integer pinTwo, Frame nextFrame) {
+    validateInputPins(integerToInt(pinOne), integerToInt(pinTwo));
     this.pinOne = pinOne;
     this.pinTwo = pinTwo;
     this.nextFrame = nextFrame;
-    validatePinsSum();
+  }
+
+  public void setPinOne(int pinOne){
+    validateInputPins(pinOne, integerToInt(pinTwo));
+    this.pinOne = pinOne;
+  }
+
+  public void setPinTwo(int pinTwo){
+    validateInputPins(integerToInt(pinOne), pinTwo);
+    this.pinTwo = pinTwo;
+  }
+
+  public void setNextFrame(Frame nextFrame){
+    this.nextFrame = nextFrame;
   }
 
   public int score(){
@@ -54,28 +68,16 @@ public class Frame {
     return MAX_SCORE.equals(pinOne);
   }
 
-  public Frame withPinTwo(int pinTwo) {
-    return toBuilder()
-        .pinTwo(pinTwo)
-        .build();
-  }
-
-  public Frame withNextFrame(Frame nextFrame) {
-    return toBuilder()
-        .nextFrame(nextFrame)
-        .build();
-  }
-
-  private void validatePinsSum(){
-    if (!pinsCorrect()) {
+  private void validateInputPins(int inputPinOne, int inputPinTwo){
+    if (!isInputPinsCorrect(inputPinOne, inputPinTwo)) {
       throw new BowlingException(format("Pins mast be between %d and %d", MIN_SCORE, MAX_SCORE));
     }
   }
 
-  private boolean pinsCorrect(){
-    return between(integerToInt(pinOne), MIN_SCORE, MAX_SCORE)
-           && between(integerToInt(pinTwo), MIN_SCORE, MAX_SCORE)
-           && between(pinsSum(), MIN_SCORE, MAX_SCORE);
+  private boolean isInputPinsCorrect(int inputPinOne, int inputPinTwo) {
+    return between(inputPinOne, MIN_SCORE, MAX_SCORE)
+           && between(inputPinTwo, MIN_SCORE, MAX_SCORE)
+           && between(inputPinOne + inputPinTwo, MIN_SCORE, MAX_SCORE);
   }
 
   private int pinsSum(){
