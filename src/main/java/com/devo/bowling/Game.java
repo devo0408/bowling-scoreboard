@@ -5,9 +5,9 @@ import java.util.function.Predicate;
 
 public class Game {
 
-  private final Frame firstFrame;
-  private Frame lastFrame;
   private int framesCount;
+  private Frame lastFrame;
+  private final Frame firstFrame;
 
   private static final int MAX_FRAMES_IN_GAME = 10;
   private static final int MAX_FRAMES_IN_GAME_EXTRA_SPARE = 11;
@@ -42,12 +42,12 @@ public class Game {
   }
 
   public int score(){
-    int gameScore = 0;
     int frameCount = 1;
+    int gameScore = firstFrame.score();
     Frame frameItem = firstFrame;
-    while (frameItem.hasNextFrame() && frameCount <= MAX_FRAMES_IN_GAME) {
-      gameScore += frameItem.score();
+    while (frameItem.hasNextFrame() && frameCount < MAX_FRAMES_IN_GAME) {
       frameItem = frameItem.getNextFrame();
+      gameScore += frameItem.score();
       frameCount++;
     }
     return gameScore;

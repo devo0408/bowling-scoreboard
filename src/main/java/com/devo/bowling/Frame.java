@@ -15,8 +15,8 @@ public class Frame {
   private Integer pinTwo;
   private Frame nextFrame;
 
-  private final Integer MIN_SCORE = 0;
-  private final Integer MAX_SCORE = 10;
+  private static final Integer MIN_SCORE = 0;
+  private static final Integer MAX_SCORE = 10;
 
 
   @Builder
